@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quién Soy?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #525252 40% , #737373 60%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 2500px;
+            width: 100%;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 1s;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pantalla inicial */
+        .welcome-screen {
+            text-align: center;
+            background: white;
+            padding: 80px 80px;
+            border-radius: 50px;
+            box-shadow: 0 20px 60px rgba(3,3,5,0.3);
+        }
+
+        h1 {
+            font-size: 7em;
+            color: #000000;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #181818 0%, #000000 100%);
+            color: white;
+            border: none;
+            padding: 20px 10px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #000000 0%, #181818 100%);
+            margin-top: 15px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #000000 0%, #181818 100%);
+        }
+
+        /* Pantalla de selección */
+        .selection-screen {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .selection-screen h2 {
+            text-align: center;
+            color: #000000;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .instruction {
+            text-align: center;
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        /* Tablero de personajes */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+        }
+
+        .character-card.selected {
+            border: 4px solid #000000;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+        }
+
+        .character-card.discarded {
+            opacity: 0.3;
+            filter: grayscale(100%);
+            position: relative;
+        }
+
+        .character-card.discarded::after {
+            content: '✕';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            color: #000000;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .character-card.revealed {
+            animation: revealPulse 1s infinite;
+            border: 5px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes revealPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .character-avatar {
+            width: 100%;
+            height: 160px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .character-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: #000;
+            font-size: 1.1em;
+        }
+
+        /* Pantalla de juego */
+        .game-screen {
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-header h2 {
+            color: #000000;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .game-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .status-message {
+            background: linear-gradient(135deg, #ffeaa7 0%, #000000 100%);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .characters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 15px;
+            }
+            .character-avatar {
+                height: 100px;
+                font-size: 3em;
+            }
+            .game-screen, .selection-screen {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="welcomeScreen" class="screen active welcome-screen">
+            <h1>¿Quién Soy?</h1>
+            <p class="subtitle">El juego de adivinanzas clásico</p>
+            <p style="margin-bottom: 30px; color: #666;">
+                Un jugador elige un personaje secreto.<br>
+                Tu amig@ te dara las pistas.
+            </p>
+			<p style="margin-bottom: 30px; color: #666;">
+                Desarrollado por Ivan Azuaga 2025.
+            </p>
+            <button class="btn" onclick="startGame()">Comenzar</button>
+        </div>
+
+        <div id="selectionScreen" class="screen selection-screen">
+            <h2> Elige tu Personaje Secreto</h2>
+            <p class="instruction">Haz clic en el personaje que tu amigo/a deberá adivinar</p>
+            <div id="selectionGrid" class="characters-grid"></div>
+            <div class="game-actions">
+                <button class="btn btn-success" onclick="confirmSelection()" id="confirmBtn" disabled>
+                    Confirmar y Comenzar
+                </button>
+                <button class="btn btn-secondary" onclick="showWelcome()">Volver</button>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="screen game-screen">
+            <div class="game-header">
+                <h2> ¡A Jugar!</h2>
+                <p class="instruction">Haz clic en los personajes para descartarlos</p>
+            </div>
+            <div class="status-message" id="statusMessage">
+                Tu amigo/a debe adivinar el personaje. ¡Descarta según las preguntas!
+            </div>
+            <div id="gameGrid" class="characters-grid"></div>
+            <div class="game-actions">
+                <button class="btn btn-success" onclick="revealCharacter()">Revelar Personaje</button>
+                <button class="btn" onclick="resetGame()"> Reiniciar Partida</button>
+                <button class="btn btn-secondary" onclick="showWelcome()"> Menú Principal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const characters = [
+            { name: 'Mario', image: 'images/mario.png' },
+            { name: 'Luigi', image: 'images/luigi.png' },
+            { name: 'Peach', image: 'images/peach.png'},
+            { name: 'Yoda', image: 'images/yoda.jpg' },
+            { name: 'Darth Vader', image: 'images/darkvader.jpg' },
+            { name: 'Leia', image: 'images/leia.jpg'},
+            { name: 'Batman', image: 'images/batman.jpg' },
+            { name: 'Superman', image: 'images/superman.png' },
+            { name: 'Wonder Woman', image: 'images/wonderwoman.jpg'},
+            { name: 'Iron Man', image: 'images/ironman.jpg' },
+            { name: 'Spider-Man', image: 'images/spiderman.jpg' },
+            { name: 'Hulk', image: 'images/hulk.jpg' },
+            { name: 'Pikachu', image: 'images/pikachu.jpg' },
+            { name: 'Sonic', image: 'images/sonic.jpg' },
+            { name: 'Kirby', image: 'images/kirby.jpg' },
+            { name: 'Link', image: 'images/link.jpg' },
+            { name: 'Zelda', image: 'images/zelda.jpg' },
+            { name: 'Donkey Kong', image: 'images/donkeykong.jpg' },
+            { name: 'Pac-Man', image: 'images/pacman.png' },
+            { name: 'Minion', image: 'images/minion.jpg' }
+        ];
+
+        let selectedCharacter = null;
+        let discardedCharacters = new Set();
+        let revealed = false;
+
+        function showWelcome() {
+            hideAllScreens();
+            document.getElementById('welcomeScreen').classList.add('active');
+            resetGame();
+        }
+
+        function startGame() {
+            hideAllScreens();
+            document.getElementById('selectionScreen').classList.add('active');
+            renderSelectionGrid();
+        }
+
+        function hideAllScreens() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        }
+
+        function renderSelectionGrid() {
+            const grid = document.getElementById('selectionGrid');
+            grid.innerHTML = '';
+            
+            characters.forEach((char, index) => {
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                card.innerHTML = `
+                    <div class="character-avatar">
+                        <img src="${char.image}" alt="${char.name}">
+                    </div>
+                    <div class="character-name">${char.name}</div>
+                `;
+                card.onclick = () => selectCharacter(index, card);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectCharacter(index, cardElement) {
+            document.querySelectorAll('#selectionGrid .character-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            
+            cardElement.classList.add('selected');
+            selectedCharacter = index;
+            document.getElementById('confirmBtn').disabled = false;
+        }
+
+        function confirmSelection() {
+            if (selectedCharacter === null) return;
+            
+            hideAllScreens();
+            document.getElementById('gameScreen').classList.add('active');
+            renderGameGrid();
+            revealed = false;
+            discardedCharacters.clear();
+        }
+
+        function renderGameGrid() {
+            const grid = document.getElementById('gameGrid');
+            grid.innerHTML = '';
+            
+            characters.forEach((char, index) => {
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                if (discardedCharacters.has(index)) {
+                    card.classList.add('discarded');
+                }
+                if (revealed && index === selectedCharacter) {
+                    card.classList.add('revealed');
+                }
+                
+                card.innerHTML = `
+                    <div class="character-avatar">
+                        <img src="${char.image}" alt="${char.name}">
+                    </div>
+                    <div class="character-name">${char.name}</div>
+                `;
+                
+                card.onclick = () => toggleDiscard(index);
+                grid.appendChild(card);
+            });
+
+            updateStatusMessage();
+        }
+
+        function toggleDiscard(index) {
+            if (revealed) return; 
+            
+            if (discardedCharacters.has(index)) {
+                discardedCharacters.delete(index);
+            } else {
+                discardedCharacters.add(index);
+            }
+            renderGameGrid();
+        }
+
+        function updateStatusMessage() {
+            const remaining = characters.length - discardedCharacters.size;
+            const msg = document.getElementById('statusMessage');
+            
+            if (revealed) {
+                msg.innerHTML = `¡El personaje era <strong>${characters[selectedCharacter].name}</strong>!`;
+                msg.style.background = 'linear-gradient(135deg, #a8e6cf 0%, #56cc9d 100%)';
+            } else {
+                msg.innerHTML = `Quedan <strong>${remaining}</strong> personajes en juego`;
+                msg.style.background = 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)';
+            }
+        }
+
+        function revealCharacter() {
+            if (selectedCharacter === null) return;
+            revealed = true;
+            renderGameGrid();
+        }
+
+        function resetGame() {
+            selectedCharacter = null;
+            discardedCharacters.clear();
+            revealed = false;
+            document.getElementById('confirmBtn').disabled = true;
+        }
+		
+        showWelcome();
+    </script>
+</body>
+</html>
