@@ -40,7 +40,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Pantalla inicial */
         .welcome-screen {
             text-align: center;
             background: white;
@@ -115,10 +114,9 @@
             font-size: 1.1em;
         }
 
-        /* Tablero de personajes */
         .characters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 40px;
             margin-bottom: 80px;
         }
@@ -176,7 +174,7 @@
 
         .character-avatar {
             width: 100%;
-            height: 160px;
+            height: 300px;
             border-radius: 10px;
             margin-bottom: 10px;
             display: flex;
@@ -315,7 +313,23 @@
             { name: 'Zelda', image: 'images/zelda.jpg' },
             { name: 'Donkey Kong', image: 'images/donkeykong.jpg' },
             { name: 'Pac-Man', image: 'images/pacman.png' },
-            { name: 'Minion', image: 'images/minion.jpg' }
+            { name: 'Minion', image: 'images/minion.jpg' },
+            { name: 'Kratos', image: 'images/kratos.jpg'},
+            { name: 'Snake', image: 'images/snake.jpg'},
+            { name: 'Harry Potter', image: 'images/harry.jpg'},
+            { name: 'Gumball', image: 'images/gumball.png'},
+            { name: 'Darwin', image: 'images/darwin.png'},
+            { name: 'Walter White', image: 'images/walter.jpg'},
+            { name: 'Steve', image: 'images/steve.jpg'},
+            { name: 'Creeper', image: 'images/creeper.jpg'},
+            { name: 'Goku', image: 'images/goku.jpg'},
+            { name: 'Naruto', image: 'images/naruto.jpg'},
+            { name: 'Shrek', image: 'images/shrek.jpg'},
+            { name: 'Woody', image: 'images/woody.jpg'},
+            { name: 'Po', image: 'images/po.jpg'},
+            { name: 'Wall-e', image: 'images/wall-e.jpg'},
+            { name: 'Stitch', image: 'images/stitch.png'}
+
         ];
 
         let selectedCharacter = null;
